@@ -28,7 +28,7 @@ const seed = async () => {
         await User.create({
           name: u.name,
           email: u.email,
-          password: u.password,
+          password: u.password, // Store plain password for seeding, it will be hashed by pre-save hook
           role: u.role,
           status: u.status
         });
