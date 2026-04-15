@@ -1,0 +1,40 @@
+const User = require('../models/user');
+const { generateAccessToken, generateRefreshToken } = require('../utils/generateToken');
+const jwt = require('jsonwebtoken');
+
+const loginUser = async (email, password) => {
+  const user = await User.findOne({ email }).select('+password +refreshToken');
+  if (!user) throw new Error('Invalid credentials');
+  if (user.status === 'inactive') throw new Error('Account is inactive');
+
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) throw new Error('Invalid credentials');
+
+  const accessToken = generateAccessToken(user._id);
+  const refreshToken = generateRefreshToken(user._id);
+
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  const userObj = user.toObject();
+  delete userObj.password;
+  delete userObj.refreshToken;
+
+  return { user: userObj, accessToken, refreshToken };
+};
+
+const refreshAccessToken = async (token) => {
+  if (!token) throw new Error('No refresh token');
+  const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+  const user = await User.findById(decoded.id).select('+refreshToken');
+  if (!user || user.refreshToken !== token) throw new Error('Invalid refresh token');
+
+  const accessToken = generateAccessToken(user._id);
+  return accessToken;
+};
+
+const logoutUser = async (userId) => {
+  await User.findByIdAndUpdate(userId, { refreshToken: null });
+};
+
+module.exports = { loginUser, refreshAccessToken, logoutUser };
