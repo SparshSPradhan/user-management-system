@@ -1,7 +1,6 @@
-require('dotenv').config({ path: '../../../.env' });
-// Run from backend folder: node src/seeders/seed.js
 require('dotenv').config();
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const connectDB = require('../config/db');
 
@@ -12,15 +11,36 @@ const users = [
 ];
 
 const seed = async () => {
-  await connectDB();
-  await User.deleteMany({});
-  console.log('Cleared existing users');
-  for (const u of users) {
-    await User.create(u);
+  try {
+    await connectDB();
+    await User.deleteMany({});
+
+
+    await User.deleteMany({});
+    console.log('Cleared existing users');
+
+    for (const u of users) {
+  
+        const hashedPassword = await bcrypt.hash(u.password, 12);
+        console.log("PLAIN PASSWORD:", u.password);
+        console.log("HASHED PASSWORD:", hashedPassword);
+      
+        await User.create({
+          name: u.name,
+          email: u.email,
+          password: u.password,
+          role: u.role,
+          status: u.status
+        });
+      }
+
+    console.log('Seeded users successfully');
+
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
   }
-  console.log('Seeded users:');
-  users.forEach(u => console.log(`  ${u.role}: ${u.email} / ${u.password}`));
-  process.exit(0);
 };
 
 seed();
