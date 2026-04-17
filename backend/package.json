@@ -2,10 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "src/server.js",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "seed": "node src/seeders/seed.js"
+ "scripts": {
+    "start":          "node src/server.js",
+    "dev":            "nodemon src/server.js",
+    "seed":           "node src/database/seeds/seed.js",
+    "seed:fresh":     "node src/database/seeds/seed.js --fresh",
+    "seed:dry":       "node src/database/seeds/seed.js --dry-run",
+    "migrate":        "node src/database/migrations/runner.js",
+    "migrate:status": "node src/database/migrations/runner.js --status",
+    "migrate:down":   "node src/database/migrations/runner.js --rollback"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
