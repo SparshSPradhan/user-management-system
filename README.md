@@ -258,7 +258,7 @@ user-management-system/
 
 ```bash
 # 1. Clone repo
-git clone https://github.com/yourname/user-management-system.git
+git clone https://github.com/SparshSPradhan/user-management-system.git
 cd user-management-system
 
 # 2. Create environment file
@@ -370,7 +370,7 @@ docker-compose down -v
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/sparshspradhan/user-management-system.git
+git clone https://github.com/SparshSPradhan/user-management-system.git
 cd user-management-system
 ```
 
@@ -434,8 +434,11 @@ Backend API on: http://localhost:5001
 
 ### Backend (Render)
 
+-       https://user-management-system-j7o3.onrender.com
 
 ### Frontend (Vercel)
+
+-       https://user-management-system-nu-bice.vercel.app
 
 ---
 

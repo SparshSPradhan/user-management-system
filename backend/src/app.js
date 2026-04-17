@@ -12,6 +12,12 @@ const sendResponse = require('./utils/sendResponse');
 
 const app = express();
 
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'User Management API is running 🚀'
+  });
+});
 
 // Security & parsing
 app.use(helmet());
