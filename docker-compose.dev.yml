@@ -1,0 +1,46 @@
+# — Dev mode (only MongoDB in Docker, code runs locally)
+
+version: "3.9"
+
+# Run with: docker-compose -f docker-compose.dev.yml up -d
+# Then start backend and frontend locally with npm run dev
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: ums_mongo_dev
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret123
+      MONGO_INITDB_DATABASE: user_management
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_dev_data:/data/db
+      - ./mongo-init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: ums_mongo_express_dev
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: secret123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:secret123@mongo:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: mexpress123
+    ports:
+      - "8081:8081"
+
+volumes:
+  mongo_dev_data:
+    driver: local
