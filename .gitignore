@@ -1,4 +1,12 @@
-node_modules
+# Environment
 .env
-dist
-build
+.env.local
+.env.production
+
+# Docker volumes
+mongo_data/
+
+# Node
+node_modules/
+dist/
+build/
