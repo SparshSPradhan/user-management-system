@@ -43,6 +43,11 @@ Features include secure authentication, full CRUD operations, audit tracking, an
 - Backend: Render
 - Frontend: Vercel
 
+**DevOps & Containerization:**
+-Docker (multi-stage builds for optimized images)
+-Docker Compose (multi-service orchestration)
+-Nginx (for serving frontend & reverse proxy - SPA serving + API reverse proxy)
+
 ---
 
 ## Features
