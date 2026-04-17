@@ -453,14 +453,6 @@ Backend API on: http://localhost:5001
 
 ---
 
-## Git Workflow
-Use conventional commits:
-- `feat:`
-- `fix:`
-- `refactor:`
-- `chore:`
-
----
 
 **Made with ❤️ for Purple Merit Technologies Assessment**
 
