@@ -31,7 +31,7 @@ Features include secure authentication, full CRUD operations, audit tracking, an
 **Frontend:**
 - React 18 + Redux Toolkit + React Router v6
 - Vite
-- Plain CSS with design tokens
+- Tailwind CSS (utility-first styling)
 
 **Backend:**
 - Node.js + Express.js
@@ -74,64 +74,78 @@ Features include secure authentication, full CRUD operations, audit tracking, an
 ## Folder Structure
 
 
+
 user-management-system/
 │
-├── backend/                          # Node.js + Express
+├── backend/                                      # Node.js + Express
 │   ├── src/
-│   │   ├── controllers/              # Handle request/response
+│   │   ├── controllers/                          # Request handlers-Handle request/response
 │   │   │   ├── auth.controller.js
 │   │   │   └── user.controller.js
 │   │   │
-│   │   ├── services/                 # Business logic
+│   │   ├── services/                             # Business logic
 │   │   │   ├── auth.service.js
 │   │   │   └── user.service.js
 │   │   │
-│   │   ├── models/                   # MongoDB Models
+│   │   ├── models/                               # Mongoose Models
 │   │   │   └── User.js
 │   │   │
-│   │   ├── routes/                   # API routes
+│   │   ├── routes/                               # API Routes
 │   │   │   ├── auth.routes.js
 │   │   │   └── user.routes.js
 │   │   │
-│   │   ├── middleware/               # Auth, RBAC, validation
+│   │   ├── middleware/                           # Auth & Validation
 │   │   │   ├── auth.middleware.js
 │   │   │   ├── rbac.middleware.js
 │   │   │   └── validate.middleware.js
 │   │   │
-│   │   ├── utils/                    # Helper functions
+│   │   ├── utils/                                # Utilities-Helper functions
 │   │   │   ├── generateToken.js
 │   │   │   └── sendResponse.js
 │   │   │
-│   │   ├── config/                   # Configuration
-│   │   │   └── db.js
+│   │   ├── config/
+│   │   │   └── db.js                             # MongoDB connection (Docker-ready)
 │   │   │
-│   │   ├── seeders/                  # Seed data
-│   │   │   └── seed.js
+│   │   ├── database/                             # Database management
+│   │   │   ├── schema.js                         # Annotated schema reference
+│   │   │   ├── migrations/
+│   │   │   │   ├── runner.js                     # Migration runner
+│   │   │   │   ├── 001_create_users_indexes.js
+│   │   │   │   ├── 002_add_status_default.js
+│   │   │   │   └── 003_add_audit_fields.js
+│   │   │   └── seeds/
+│   │   │       ├── seed.js                       # Main seed script
+│   │   │       └── data/
+│   │   │           └── users.js
 │   │   │
-│   │   ├── app.js                    # Express app setup (middleware, routes)
-│   │   └── server.js                 # Entry point (DB connect + listen)
+│   │   │                          
+│   │   │   
+│   │   │
+│   │   ├── app.js                                # Express app setup (middleware, routes)
+│   │   └── server.js                             # Entry point (DB connect + listen)
 │   │
-│   ├── .env
+│   ├── Dockerfile                                # Backend Docker image
+│   ├── .env.example
 │   └── package.json
 │
 │
-├── frontend/                         # React + Vite + Tailwind CSS
+├── frontend/                                     # React + Vite + Tailwind
 │   ├── src/
-│   │   ├── api/                      # API calls using axios
+│   │   ├── api/                                  # Axios API calls
 │   │   │   ├── axiosInstance.js
 │   │   │   ├── authApi.js
 │   │   │   └── userApi.js
 │   │   │
-│   │   ├── components/               # Reusable UI components
+│   │   ├── components/                           # Reusable components
 │   │   │   ├── Navbar.jsx
 │   │   │   ├── Loader.jsx
 │   │   │   ├── PrivateRoute.jsx
 │   │   │   ├── RoleGuard.jsx
-│   │   │   ├── PageHeader.jsx        # New
-│   │   │   ├── FormField.jsx         # New
-│   │   │   └── StatCard.jsx          # New
+│   │   │   ├── PageHeader.jsx
+│   │   │   ├── FormField.jsx
+│   │   │   └── StatCard.jsx
 │   │   │
-│   │   ├── pages/                    # Page components
+│   │   ├── pages/                                # Page Components
 │   │   │   ├── LoginPage.jsx
 │   │   │   ├── DashboardPage.jsx
 │   │   │   ├── UsersListPage.jsx
@@ -140,34 +154,47 @@ user-management-system/
 │   │   │   ├── ProfilePage.jsx
 │   │   │   └── NotFoundPage.jsx
 │   │   │
-│   │   ├── store/                    # Redux store
+│   │   ├── store/                                # Redux
 │   │   │   ├── index.js
 │   │   │   └── slices/
 │   │   │       ├── authSlice.js
 │   │   │       └── userSlice.js
 │   │   │
-│   │   ├── hooks/                    # Custom hooks
+│   │   ├── hooks/                                # Custom Hooks
 │   │   │   └── useAuth.js
 │   │   │
-│   │   ├── utils/                    # Utilities
+│   │   ├── utils/                                # Utilities
 │   │   │   └── roles.js
 │   │   │
 │   │   ├── App.jsx
 │   │   ├── main.jsx
 │   │   └── index.css
 │   │
+│   ├── Dockerfile                                # Frontend Docker image (Nginx)
+│   ├── nginx.conf                                # Nginx config for SPA + API proxy
 │   ├── .env
 │   ├── vite.config.js
-│   ├── tailwind.config.js            # New - Tailwind configuration
-│   ├── postcss.config.js             # New - PostCSS configuration
+│   ├── tailwind.config.js                        # Tailwind configuration
+│   ├── postcss.config.js                         # PostCSS configuration
 │   └── package.json
 │
 │
-├── docs/                             # Documentation
+├── mongo-init/                                   # MongoDB initialization
+│   └── mongo-init.js                             # Creates DB, user & indexes
+│
+│
+├── docs/                                         # Documentation
 │   └── README.md
 │
+├── .env.example                                  # Root level env template
+├── docker-compose.yml                            # Full stack (mongo + backend + frontend)
+├── docker-compose.dev.yml                        # Dev mode (only mongo)
 ├── .gitignore
 └── README.md
+
+
+
+
 
 ### Backend (`backend/src/`)
 - `config/db.js` – MongoDB connection
@@ -177,7 +204,7 @@ user-management-system/
 - `routes/` – Express routers
 - `middleware/` – Auth, RBAC, validation
 - `utils/` – Token generation & response formatter
-- `seeders/seed.js` – Demo user seeder
+- `database/seeds/seed.js` – Structured database seeder
 
 ### Frontend (`frontend/src/`)
 - `api/` – Axios instance & API calls
@@ -215,6 +242,127 @@ user-management-system/
 - MongoDB Atlas (or local MongoDB)
 - Git
 
+
+🚀 Run with Docker (Recommended)-
+
+## 🚀 Complete Setup Guide — 3 Workflows
+
+---
+
+### 🐳 Workflow A — Full Docker (Everything in Containers)
+
+```bash
+# 1. Clone repo
+git clone https://github.com/yourname/user-management-system.git
+cd user-management-system
+
+# 2. Create environment file
+cp .env.example .env
+# Edit .env — fill JWT secrets
+
+# 3. Start all services
+docker-compose up -d --build
+
+# 4. Run migrations
+docker-compose exec backend node src/database/migrations/runner.js
+
+# 5. Seed the database
+docker-compose exec backend node src/database/seeds/seed.js
+```
+
+**Access:**
+
+* Frontend → http://localhost:5173
+* API → http://localhost:5001/api
+* Mongo GUI → http://localhost:8081 (admin / mexpress123)
+
+---
+
+### 🧪 Workflow B — Dev Mode (Mongo in Docker, Code Local)
+
+```bash
+# 1. Start MongoDB
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+```bash
+# 2. Backend setup
+cd backend
+cp .env.example .env
+npm install
+npm run migrate
+npm run seed
+npm run dev
+```
+
+```bash
+# 3. Frontend setup
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+**Access:**
+
+* Frontend → http://localhost:5173
+* API → http://localhost:5001/api
+* Mongo GUI → http://localhost:8081
+
+---
+
+### ☁️ Workflow C — MongoDB Atlas (No Docker)
+
+```bash
+cd backend
+cp .env.example .env
+npm install
+npm run migrate
+npm run seed
+npm run dev
+```
+
+---
+
+### 🔐 Generate Secure JWT Secrets
+
+```bash
+node -e "
+const c = require('crypto');
+console.log('JWT_SECRET=' + c.randomBytes(64).toString('hex'));
+console.log('JWT_REFRESH_SECRET=' + c.randomBytes(64).toString('hex'));
+"
+```
+
+---
+
+### 🛠 Useful Docker Commands
+
+```bash
+# Logs
+docker-compose logs -f backend
+
+# Shell into backend
+docker-compose exec backend sh
+
+# Mongo shell
+docker-compose exec mongo mongosh -u admin -p secret123
+
+# Migration status
+docker-compose exec backend npm run migrate:status
+
+# Stop containers
+docker-compose down
+
+# Full reset (⚠️ deletes DB)
+docker-compose down -v
+```
+
+
+## OR
+
+
+
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/sparshspradhan/user-management-system.git
@@ -234,7 +382,7 @@ cd ../frontend && npm install
 
 **Backend — Create `backend/.env`:**
 ```env
-PORT=5000
+PORT=5001
 MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/user-management
 JWT_SECRET=your_super_secret_jwt_key
 JWT_REFRESH_SECRET=your_refresh_secret_key
